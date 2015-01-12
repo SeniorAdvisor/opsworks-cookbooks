@@ -1,0 +1,109 @@
+#!#{node['opsworks_jruby']['jruby_path']}/jruby
+
+require 'etc'
+require 'digest/md5'
+
+ROOT_PATH="<%= @deploy[:deploy_to] %>"
+APP_NAME="<%= @application %>"
+PID_PATH="<%= @deploy[:deploy_to] %>/shared/pids/torquebox.pid"
+
+def run_and_print_command(command)
+  puts command
+  system(command) || exit(1)
+end
+
+def run_and_ignore_exitcode_and_print_command(command)
+  puts command
+  system(command)
+end
+
+def torquebox_running?
+  if File.exists?(PID_PATH) && (pid = File.read(PID_PATH).chomp) && system("ps aux | grep #{pid} | grep -v grep > /dev/null")
+    pid
+  else
+    false
+  end
+end
+
+def different_gemfile?
+  if File.exists?("#{ROOT_PATH}/current/Gemfile")
+    dir = Dir["#{ROOT_PATH}/releases/*"]
+    previous_release_path = dir.sort[dir.size-2]
+    if !previous_release_path.nil? && File.exists?("#{previous_release_path}/Gemfile")
+      return Digest::MD5.hexdigest(File.read("#{ROOT_PATH}/current/Gemfile")) != Digest::MD5.hexdigest(File.read("#{previous_release_path}/Gemfile"))
+    end
+  end
+  false
+end
+
+def start_torquebox
+  if File.exists?("#{ROOT_PATH}/current/Gemfile")
+    puts "OpsWorks: Gemfile detected - running torquebox with bundle exec"
+    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && #{node['opsworks_jruby']['jruby_path']}/bundle exec torquebox deploy && RACK_ENV=#{node[:torquebox][:rack_env]} #{node['opsworks_jruby']['jruby_path']}/bundle exec torquebox run --max-threads=#{node[:torquebox][:max_threads]} -b #{node[:torquebox][:bind]} -p #{node[:torquebox][:bind]}"
+  else
+    puts "OpsWorks: no Gemfile detected - running plain torquebox"
+    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && torquebox deploy && RACK_ENV=#{node[:torquebox][:rack_env]} torquebox run --max-threads=#{node[:torquebox][:max_threads]} -b #{node[:torquebox][:bind]} -p #{node[:torquebox][:bind]}"
+  end
+end
+
+def stop_torquebox
+  if torquebox_running?
+    if run_and_ignore_exitcode_and_print_command "kill -QUIT `cat #{PID_PATH}`"
+      `rm #{PID_PATH}`
+    end
+  else
+    puts "You can't stop torquebox, because it's not running"
+  end
+end
+
+def restart_torquebox
+	if torquebox_running?
+		run_and_ignore_exitcode_and_print_command "kill -USR2 `cat #{PID_PATH}`"
+	else
+		start_torquebox
+	end
+end
+
+def clean_restart
+  if different_gemfile?
+    puts "Found a previous version with a different Gemfile: Doing a stop & start"
+    stop_torquebox if torquebox_running?
+    start_torquebox
+  else
+    puts "No previous version with a different Gemfile found. Assuming a quick restart without re-loading gems is save"
+    restart_torquebox
+  end
+end
+
+def status_torquebox
+	if pid = torquebox_running?
+		puts "torquebox <%= @application %> running with PID #{pid}"
+		return true
+	else
+		puts "torquebox <%= @application %> not running"
+		return false
+  end
+end
+
+Process::Sys.setuid(uid = Etc.getpwnam("<%= @deploy[:user] %>").uid)
+puts "Set torquebox process UID to #{uid}"
+
+case ARGV[0]
+when "start"
+  puts "Starting torquebox #{APP_NAME}"
+  start_torquebox
+when "stop"
+  puts "Stopping torquebox #{APP_NAME}"
+  stop_torquebox
+when "status"
+  status_torquebox
+when "restart"
+  restart_torquebox
+when "clean-restart"
+  clean_restart
+else
+  puts "Usage: {start|stop|status|restart|clean-restart}"
+  exit 1
+end
+
+exit 0

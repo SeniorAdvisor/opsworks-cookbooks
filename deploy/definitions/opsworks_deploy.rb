@@ -178,7 +178,11 @@ define :opsworks_deploy do
         application application
         deploy deploy
       end
-
+    when 'torquebox'
+      torquebox_web_app do
+        application application
+        deploy deploy
+      end
     else
       raise "Unsupport Rails stack"
     end
