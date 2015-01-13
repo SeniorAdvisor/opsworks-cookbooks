@@ -11,7 +11,7 @@
 jruby_url = node['opsworks_jruby']['jruby_url'] || "https://s3.amazonaws.com/jruby.org/downloads/#{node['opsworks_jruby']['version']}/jruby-bin-#{node['opsworks_jruby']['version']}.tar.gz"
 src_filepath = "/tmp/jruby-#{node['opsworks_jruby']['version']}.tar.gz"
 jruby_path = "#{node['opsworks_jruby']['home_base_dir']}/jruby-#{node['opsworks_jruby']['version']}/bin"
-node['opsworks_jruby']['jruby_path'] = jruby_path
+node.default['opsworks_jruby']['jruby_path'] = jruby_path
 
 include_recipe "opsworks_java::setup"
 
