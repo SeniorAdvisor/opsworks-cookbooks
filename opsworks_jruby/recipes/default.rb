@@ -56,3 +56,4 @@ export PATH=#{jruby_path}:$PATH
   content body
   mode 0755
 end
+include_recipe 'opsworks_bundler'
