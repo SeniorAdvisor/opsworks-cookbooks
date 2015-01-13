@@ -50,8 +50,8 @@ file "/etc/profile.d/jruby.sh" do
   body = <<-CONTENT
 export PATH=#{jruby_path}:$PATH
   CONTENT
-  if node['opsworks_jruby']['RUBY_OPTS'].to_s.strip =~ /\w/
-    body << "export RUBY_OPTS=#{node['opsworks_jruby']['RUBY_OPTS']}"
+  if node['opsworks_jruby']['JRUBY_OPTS'].to_s.strip =~ /\w/
+    body << "export JRUBY_OPTS=#{node['opsworks_jruby']['JRUBY_OPTS']}"
   end
   content body
   mode 0755
