@@ -38,6 +38,12 @@ execute "extract #{src_filepath} to #{node['opsworks_jruby']['home_base_dir']}/j
   cwd  ::File.dirname(src_filepath)
   command "tar zxf #{::File.basename(src_filepath)} -C #{node['opsworks_jruby']['home_base_dir']}"
 end
+execute "Install Bundler for Jruby" do
+  not_if do
+    ::File.exists?("#{jruby_path}/bundle")
+  end
+  command "#{jruby_path}/gem install bundler"
+end
 
 execute "Clean up" do
   command "rm -rf jruby-*"
@@ -56,4 +62,3 @@ export PATH=#{jruby_path}:$PATH
   content body
   mode 0755
 end
-include_recipe 'opsworks_bundler'
