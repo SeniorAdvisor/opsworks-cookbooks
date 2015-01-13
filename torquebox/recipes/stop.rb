@@ -1,14 +1,14 @@
-# stop Unicorn service per app
+# stop Torquebox service per app
 node[:deploy].each do |application, deploy|
   if deploy[:application_type] != 'rails'
-    Chef::Log.debug("Skipping unicorn::rails application #{application} as it is not an Rails app")
+    Chef::Log.debug("Skipping torquebox::rails application #{application} as it is not an Rails app")
     next
   end
 
-  execute "stop unicorn" do
-    command "#{deploy[:deploy_to]}/shared/scripts/unicorn stop"
+  execute "stop torquebox" do
+    command "#{deploy[:deploy_to]}/shared/scripts/torquebox stop"
     only_if do
-      File.exists?("#{deploy[:deploy_to]}/shared/scripts/unicorn")
+      File.exists?("#{deploy[:deploy_to]}/shared/scripts/torquebox")
     end
   end
 end

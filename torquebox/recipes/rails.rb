@@ -1,4 +1,4 @@
-# setup torquebox service per app
+# setup Torquebox service per app
 node[:deploy].each do |application, deploy|
   if deploy[:application_type] != 'rails'
     Chef::Log.debug("Skipping torquebox::rails application #{application} as it is not an Rails app")
