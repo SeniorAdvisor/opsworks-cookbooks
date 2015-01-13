@@ -1,6 +1,6 @@
 module OpsWorks
   module RailsConfiguration
-    def self.determine_database_adapter(app_name, app_config, app_root_path, options = {})
+    def self.determine_database_adapter(app_name, app_config, app_root_path,node, options = {})
       options = {
         :consult_gemfile => true,
         :force => false
@@ -34,7 +34,7 @@ module OpsWorks
       end
     end
 
-    def self.bundle(app_name, app_config, app_root_path)
+    def self.bundle(app_name, app_config, app_root_path, node)
       if File.exists?("#{app_root_path}/Gemfile")
         Chef::Log.info("Gemfile detected. Running bundle install.")
         Chef::Log.info("sudo su - #{app_config[:user]} -c 'cd #{app_root_path} && #{node[:rails][:bundle_path]}/bundle install --path #{app_config[:home]}/.bundler/#{app_name} --without=#{app_config[:ignore_bundler_groups].join(' ')}'")

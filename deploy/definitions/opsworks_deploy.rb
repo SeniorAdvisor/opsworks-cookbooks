@@ -102,13 +102,14 @@ define :opsworks_deploy do
 
         if deploy[:application_type] == 'rails'
           if deploy[:auto_bundle_on_deploy]
-            OpsWorks::RailsConfiguration.bundle(application, node[:deploy][application], release_path)
+            OpsWorks::RailsConfiguration.bundle(application, node[:deploy][application], release_path, node)
           end
 
           node.default[:deploy][application][:database][:adapter] = OpsWorks::RailsConfiguration.determine_database_adapter(
             application,
             node[:deploy][application],
             release_path,
+            node,
             :force => node[:force_database_adapter_detection],
             :consult_gemfile => node[:deploy][application][:auto_bundle_on_deploy]
           )
@@ -128,7 +129,7 @@ define :opsworks_deploy do
             end
           end.run_action(:create)
         elsif deploy[:application_type] == 'aws-flow-ruby'
-          OpsWorks::RailsConfiguration.bundle(application, node[:deploy][application], release_path)
+          OpsWorks::RailsConfiguration.bundle(application, node[:deploy][application], release_path, node)
         elsif deploy[:application_type] == 'php'
           template "#{node[:deploy][application][:deploy_to]}/shared/config/opsworks.php" do
             cookbook 'php'
