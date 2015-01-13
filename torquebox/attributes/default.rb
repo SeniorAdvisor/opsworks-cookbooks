@@ -20,5 +20,4 @@ default[:torquebox][:version] = '3.1.1'
 default[:torquebox][:port] = '80'
 default[:torquebox][:bind] = '0.0.0.0'
 default[:torquebox][:max_threads] = '15'
-default[:torquebox][:rack_env] = 'production'
 include_attribute "torquebox::customize"
