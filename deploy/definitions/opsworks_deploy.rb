@@ -165,7 +165,7 @@ define :opsworks_deploy do
   end
 
   if deploy[:application_type] == 'rails' && node[:opsworks][:instance][:layers].include?('rails-app')
-    case node[:opsworks][:rails_stack][:name]
+    case node[:opsworks][:rails_stack][:my_name]
 
     when 'apache_passenger'
       passenger_web_app do

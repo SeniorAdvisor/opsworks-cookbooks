@@ -15,7 +15,8 @@
 ###
 
 default[:opsworks][:rails_stack][:name] = "apache_passenger"
-case node[:opsworks][:rails_stack][:name]
+default[:opsworks][:rails_stack][:my_name] = "apache_passenger"
+case node[:opsworks][:rails_stack][:my_name]
 when "apache_passenger"
   normal[:opsworks][:rails_stack][:recipe] = "passenger_apache2::rails"
   normal[:opsworks][:rails_stack][:needs_reload] = true
