@@ -38,11 +38,15 @@ execute "extract #{src_filepath} to #{node['opsworks_jruby']['home_base_dir']}/j
   cwd  ::File.dirname(src_filepath)
   command "tar zxf #{::File.basename(src_filepath)} -C #{node['opsworks_jruby']['home_base_dir']}"
 end
+bundler_version = '1.5.3'
+if node[:opsworks_bundler] && node[:opsworks_bundler][:version]
+  bundler_version = node[:opsworks_bundler][:version]
+end
 execute "Install Bundler for Jruby" do
   not_if do
     ::File.exists?("#{jruby_path}/bundle")
   end
-  command "#{jruby_path}/gem install bundler"
+  command "#{jruby_path}/gem install bundler -v=#{bundler_version} --no-ri --no-rdoc"
 end
 
 execute "Clean up" do
