@@ -25,7 +25,11 @@ default[:dependencies][:upgrade_debs] = false
 # this is not implemented on the application side.
 default[:dependencies][:upgrade_rpms] = false
 
-default[:dependencies][:gem_binary] = "/usr/local/bin/gem"
+if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
+  default[:dependencies][:gem_binary] = "#{node['opsworks_jruby']['jruby_path']}/gem"
+else
+  default[:dependencies][:gem_binary] = "/usr/local/bin/gem"
+end
 
 default["dependencies"]["gem_uninstall_options"] = "--force --executables"
 default["dependencies"]["gem_install_options"] = "--no-ri --no-rdoc"

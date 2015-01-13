@@ -17,5 +17,6 @@
 include_attribute "deploy"
 
 default[:rails][:version] = "2.3.5"
+default[:rails][:bundle_path] = "/usr/local/bin"
 
 include_attribute "rails::customize"

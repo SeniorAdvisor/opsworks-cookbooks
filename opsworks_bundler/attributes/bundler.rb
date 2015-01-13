@@ -15,6 +15,10 @@
 ###
 
 default[:opsworks_bundler][:version] = '1.5.3'
-default[:opsworks_bundler][:executable] = '/usr/local/bin/bundle'
+if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
+  default[:opsworks_bundler][:executable] = "#{node['opsworks_jruby']['jruby_path']}/bundle"
+else
+  default[:opsworks_bundler][:executable] = '/usr/local/bin/bundle'
+end
 
 include_attribute "opsworks_bundler::customize"

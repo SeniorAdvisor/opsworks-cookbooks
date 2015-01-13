@@ -1,5 +1,9 @@
 include_recipe "deploy"
 
+if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
+  node.default[:rails][:bundle_path] = node['opsworks_jruby']['jruby_path']
+end
+#!<%= node['opsworks_jruby']['jruby_path']%>/jruby
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
 
