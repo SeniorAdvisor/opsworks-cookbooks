@@ -6,3 +6,4 @@ description      'Installs/Configures opsworks_jruby'
 version          '0.1.0'
 
 depends 'opsworks_java'
+depends 'opsworks_bundler'
