@@ -39,10 +39,10 @@ end
 def start_torquebox
   if File.exists?("#{ROOT_PATH}/current/Gemfile")
     puts "OpsWorks: Gemfile detected - running torquebox with bundle exec"
-    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && <%= node['opsworks_jruby']['jruby_path']%>/bundle exec torquebox deploy && <%= node['opsworks_jruby']['jruby_path']%>/bundle exec torquebox run --max-threads=<%= node[:torquebox][:max_threads]%> -b <%= node[:torquebox][:bind]%> -p <%= node[:torquebox][:bind]%>"
+    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && <%= node['opsworks_jruby']['jruby_path']%>/bundle exec torquebox deploy && <%= node['opsworks_jruby']['jruby_path']%>/bundle exec torquebox run --max-threads=<%= node[:torquebox][:max_threads]%> -b <%= node[:torquebox][:bind]%> -p <%= node[:torquebox][:port]%>"
   else
     puts "OpsWorks: no Gemfile detected - running plain torquebox"
-    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && torquebox deploy && torquebox run --max-threads=<%= node[:torquebox][:max_threads]%> -b <%= node[:torquebox][:bind]%> -p <%= node[:torquebox][:bind]%>"
+    run_and_ignore_exitcode_and_print_command "cd #{ROOT_PATH}/current && torquebox deploy && torquebox run --max-threads=<%= node[:torquebox][:max_threads]%> -b <%= node[:torquebox][:bind]%> -p <%= node[:torquebox][:port]%>"
   end
 end
 

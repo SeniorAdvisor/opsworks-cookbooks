@@ -17,7 +17,7 @@
 include_attribute 'rails::rails'
 
 default[:torquebox][:version] = '3.1.1'
-default[:torquebox][:port] = '80'
+default[:torquebox][:port] = '9292'
 default[:torquebox][:bind] = '0.0.0.0'
 default[:torquebox][:max_threads] = '15'
 include_attribute "torquebox::customize"
