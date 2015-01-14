@@ -57,22 +57,12 @@ def stop_torquebox
 end
 
 def restart_torquebox
-  if torquebox_running?
-    run_and_ignore_exitcode_and_print_command "kill -USR2 `cat #{PID_PATH}`"
-  else
-    start_torquebox
-  end
+  clean_restart
 end
 
 def clean_restart
-  if different_gemfile?
-    puts "Found a previous version with a different Gemfile: Doing a stop & start"
     stop_torquebox if torquebox_running?
     start_torquebox
-  else
-    puts "No previous version with a different Gemfile found. Assuming a quick restart without re-loading gems is save"
-    restart_torquebox
-  end
 end
 
 def status_torquebox
