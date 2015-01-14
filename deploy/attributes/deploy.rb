@@ -74,8 +74,7 @@ node[:deploy].each do |application, deploy|
 
   default[:deploy][application][:migrate] = false
 
-  #default[:deploy][application][:migrate_command] = "#{node[:deploy][application][:rake]} db:migrate"
-  default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:bundle]} exec rake db:migrate" # force use bundle
+  default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:rake]} db:migrate"
   if node[:deploy][application][:auto_bundle_on_deploy]
     if File.exists?("#{node[:deploy][application][:current_path]}/Gemfile")
       default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:bundle]} exec rake db:migrate"
