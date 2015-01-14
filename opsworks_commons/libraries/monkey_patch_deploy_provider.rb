@@ -42,7 +42,8 @@ class Chef
             else
               Chef::Log.info "#{@new_resource} migrating #{@new_resource.user}"
             end
-            run_command(run_options(:command => @new_resource.migration_command, :cwd=>release_path, :log_level => :debug))
+            #run_command(run_options(:command => @new_resource.migration_command, :cwd=>release_path, :log_level => :debug))
+            command  @new_resource.migration_command
           end
         end
       end
