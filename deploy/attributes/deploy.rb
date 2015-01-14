@@ -67,21 +67,15 @@ node[:deploy].each do |application, deploy|
   if File.exists?('/usr/local/bin/rake')
     default[:deploy][application][:rake] = '/usr/local/bin/rake'
   end
-  if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
-    if File.exists?("#{node['opsworks_jruby']['jruby_path']}/rake")
-      # local Ruby rake is installed
-      default[:deploy][application][:rake] = "#{node['opsworks_jruby']['jruby_path']}/rake"
-    end
+  default[:deploy][application][:bundle] = 'bundle'
+  if File.exists?('/usr/local/bin/bundle')
+    default[:deploy][application][:bundle] = '/usr/local/bin/bundle'
   end
 
   default[:deploy][application][:migrate] = false
 
   if node[:deploy][application][:auto_bundle_on_deploy]
-    if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
-      default[:deploy][application][:migrate_command] = "if [ -f Gemfile ]; then echo 'OpsWorks: Gemfile found - running migration with bundle exec' && #{node['opsworks_jruby']['jruby_path']}/bundle exec rake db:migrate; else echo 'OpsWorks: no Gemfile - running plain migrations' && #{node[:deploy][application][:rake]} db:migrate; fi"
-    else
-      default[:deploy][application][:migrate_command] = "if [ -f Gemfile ]; then echo 'OpsWorks: Gemfile found - running migration with bundle exec' && /usr/local/bin/bundle exec rake db:migrate; else echo 'OpsWorks: no Gemfile - running plain migrations' && #{node[:deploy][application][:rake]} db:migrate; fi"
-    end
+      default[:deploy][application][:migrate_command] = "if [ -f Gemfile ]; then echo 'OpsWorks: Gemfile found - running migration with bundle exec' && #{node[:deploy][application][:bundle]} exec rake db:migrate; else echo 'OpsWorks: no Gemfile - running plain migrations' && #{node[:deploy][application][:rake]} db:migrate; fi"
   else
     default[:deploy][application][:migrate_command] = "#{node[:deploy][application][:rake]} db:migrate"
   end
