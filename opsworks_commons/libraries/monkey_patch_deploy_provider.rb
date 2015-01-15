@@ -43,6 +43,7 @@ class Chef
               Chef::Log.info "#{@new_resource} migrating #{@new_resource.user}"
             end
             Chef::Log.info "release_path: #{release_path}"
+            Chef::Log.info "release_path: #{env_info}"
             [
               'which jruby',
               'which java',
