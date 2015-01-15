@@ -71,7 +71,14 @@ define :opsworks_deploy do
       revision deploy[:scm][:revision]
       migrate deploy[:migrate]
       migration_command deploy[:migrate_command]
-      environment deploy[:environment].to_hash
+      custom_environment = deploy[:environment].to_hash
+      if deploy[:custom_environment]
+        custom_environment = custom_environment.merge(deploy[:custom_environment].to_hash)
+      end
+      if deploy[:custom_path]
+        custom_environment['PATH'] = "#{deploy[:custom_path]}:#{`echo $PATH`}"
+      end
+      environment custom_environment
       purge_before_symlink(deploy[:purge_before_symlink]) unless deploy[:purge_before_symlink].nil?
       create_dirs_before_symlink(deploy[:create_dirs_before_symlink])
       symlink_before_migrate(deploy[:symlink_before_migrate])

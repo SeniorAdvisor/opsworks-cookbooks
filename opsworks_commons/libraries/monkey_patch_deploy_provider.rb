@@ -43,11 +43,12 @@ class Chef
               Chef::Log.info "#{@new_resource} migrating #{@new_resource.user}"
             end
             Chef::Log.info "release_path: #{release_path}"
-            Chef::Log.info "release_path: #{env_info}"
+            Chef::Log.info "env: #{env_info}"
             [
               'which jruby',
               'which java',
               'which ruby',
+              'echo $PATH',
               '/usr/local/jruby-1.7.16/bin/jruby -v'
             ].each do |c|
               Chef::Log.info "#{c}: #{`#{c}`}"
