@@ -42,7 +42,15 @@ class Chef
             else
               Chef::Log.info "#{@new_resource} migrating #{@new_resource.user}"
             end
-            run_command(run_options(:command => '/usr/local/jruby-1.7.16/bin/jruby -v', :cwd=>release_path, :log_level => :debug, :output_on_failure => true))
+            Chef::Log.info "release_path: #{release_path}"
+            [
+              'which jruby',
+              'which java',
+              'which ruby',
+              '/usr/local/jruby-1.7.16/bin/jruby -v'
+            ].each do |c|
+              Chef::Log.info "#{c}: #{`#{c}`}"
+            end
             run_command(run_options(:command => @new_resource.migration_command, :cwd=>release_path, :log_level => :debug, :output_on_failure => true))
           end
         end
