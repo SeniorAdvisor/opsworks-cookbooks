@@ -74,10 +74,12 @@ node[:deploy].each do |application, deploy|
 
   default[:deploy][application][:migrate] = false
 
-  default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:rake]} db:migrate"
+  #default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:rake]} db:migrate"
+  default[:deploy][application][:migrate_command] = "#{node[:deploy][application][:rake]} db:migrate"
   if node[:deploy][application][:auto_bundle_on_deploy]
     if File.exists?("#{node[:deploy][application][:current_path]}/Gemfile")
-      default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:bundle]} exec rake db:migrate"
+      #default[:deploy][application][:migrate_command] = "cd #{node[:deploy][application][:current_path]} && #{node[:deploy][application][:bundle]} exec rake db:migrate"
+      default[:deploy][application][:migrate_command] = "#{node[:deploy][application][:bundle]} exec rake db:migrate"
     end
   end
   default[:deploy][application][:rails_env] = 'production'
