@@ -18,15 +18,15 @@ include_attribute 'opsworks_initial_setup::default'
 
 default['opsworks_rubygems']['version'] = '2.2.2'
 
-if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
-  default[:opsworks_rubygems][:gem_path] = node['opsworks_jruby']['jruby_path']
+if node['opsworks'] && node['opsworks']['jruby_path']
+  default[:opsworks_rubygems][:gem_path] = node['opsworks']['jruby_path']
   # set LC_ALL and LANG to workaround US-ASCII errors with rubygems 2.0.3 on opsworks
   case node['opsworks']['ruby_version']
   when /1.8/
-    default['opsworks_rubygems']['setup_command'] = "/usr/bin/env LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 #{node['opsworks_jruby']['jruby_path']}/jruby setup.rb --no-rdoc --no-ri"
+    default['opsworks_rubygems']['setup_command'] = "/usr/bin/env LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 #{node['opsworks']['jruby_path']}/jruby setup.rb --no-rdoc --no-ri"
   else
     # set --disable-gems for Ruby 1.9 and later
-    default['opsworks_rubygems']['setup_command'] = "/usr/bin/env LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 #{node['opsworks_jruby']['jruby_path']}/jruby --disable-gems setup.rb --no-rdoc --no-ri"
+    default['opsworks_rubygems']['setup_command'] = "/usr/bin/env LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 #{node['opsworks']['jruby_path']}/jruby --disable-gems setup.rb --no-rdoc --no-ri"
   end
 else
   default[:opsworks_rubygems][:gem_path] = "/usr/local/bin"

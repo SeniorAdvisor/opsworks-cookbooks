@@ -71,6 +71,10 @@ node[:deploy].each do |application, deploy|
   if File.exists?('/usr/local/bin/bundle')
     default[:deploy][application][:bundle] = '/usr/local/bin/bundle'
   end
+  if node['opsworks'] && node['opsworks']['jruby_path']
+    default[:deploy][application][:bundle] = "#{node['opsworks']['jruby_path']}/bundle"
+    default[:deploy][application][:rake] = "#{node['opsworks']['jruby_path']}/rake"
+  end
 
   default[:deploy][application][:migrate] = false
 

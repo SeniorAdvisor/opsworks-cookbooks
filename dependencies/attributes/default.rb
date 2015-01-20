@@ -25,8 +25,8 @@ default[:dependencies][:upgrade_debs] = false
 # this is not implemented on the application side.
 default[:dependencies][:upgrade_rpms] = false
 
-if node['opsworks_jruby'] && node['opsworks_jruby']['jruby_path']
-  default[:dependencies][:gem_binary] = "#{node['opsworks_jruby']['jruby_path']}/gem"
+if node['opsworks'] && node['opsworks']['jruby_path']
+  default[:dependencies][:gem_binary] = "#{node['opsworks']['jruby_path']}/gem"
 else
   default[:dependencies][:gem_binary] = "/usr/local/bin/gem"
 end
