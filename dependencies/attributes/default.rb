@@ -26,7 +26,11 @@ default[:dependencies][:upgrade_debs] = false
 default[:dependencies][:upgrade_rpms] = false
 
 if node['opsworks'] && node['opsworks']['jruby_path']
-  default[:dependencies][:gem_binary] = "#{node['opsworks']['jruby_path']}/gem"
+  if File.exist?('/etc/profile.d/jruby.sh')
+    default[:dependencies][:gem_binary] = ". /etc/profile.d/jruby.sh; #{node['opsworks']['jruby_path']}/gem"
+  else
+    default[:dependencies][:gem_binary] = "#{node['opsworks']['jruby_path']}/gem"
+  end
 else
   default[:dependencies][:gem_binary] = "/usr/local/bin/gem"
 end
