@@ -17,6 +17,12 @@
 include_attribute "deploy"
 
 default[:rails][:version] = "2.3.5"
-default[:rails][:bundle_path] = "/usr/local/bin"
+if node['opsworks'] && node['opsworks']['jruby_path']
+  default[:rails][:bundle_path] = node['opsworks']['jruby_path']
+else
+  default[:rails][:bundle_path] = "/usr/local/bin"
+end
+
+
 
 include_attribute "rails::customize"
