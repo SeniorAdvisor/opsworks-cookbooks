@@ -16,7 +16,7 @@
 
 default[:opsworks_bundler][:version] = '1.5.3'
 if node['opsworks'] && node['opsworks']['jruby_path']
-  default[:opsworks_bundler][:executable] = "#{node['opsworks']['jruby_path']}/bundle"
+  default[:opsworks_bundler][:executable] = ". /etc/profile.d/jruby.sh; #{node['opsworks']['jruby_path']}/bundle"
 else
   default[:opsworks_bundler][:executable] = '/usr/local/bin/bundle'
 end
