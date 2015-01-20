@@ -5,7 +5,7 @@ if node[:opsworks_bundler][:manage_package]
     package_name "bundler"
     action :install
     version node[:opsworks_bundler][:version]
-    environment 'PATH' => "#{deploy[:custom_path]}:#{`echo $PATH`}"
+    environment 'PATH' => "#{node['opsworks']['jruby_path']}:#{`echo $PATH`}"
   end
 
   # alternative/fallback install of bundler for more robustness
