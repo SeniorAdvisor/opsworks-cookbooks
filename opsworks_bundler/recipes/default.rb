@@ -5,6 +5,7 @@ if node[:opsworks_bundler][:manage_package]
     package_name "bundler"
     action :install
     version node[:opsworks_bundler][:version]
+    enforce_path_sanity "PATH" => node['opsworks']['jruby_path']
   end
 
   # alternative/fallback install of bundler for more robustness
