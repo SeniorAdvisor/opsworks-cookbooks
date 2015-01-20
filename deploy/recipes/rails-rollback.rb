@@ -9,6 +9,7 @@ node[:deploy].each do |application, deploy|
     user deploy[:user]
     environment "RAILS_ENV" => deploy[:rails_env], "RUBYOPT" => ""
     action "rollback"
+    Chef::Log.info "sleep #{deploy[:sleep_before_restart]} && #{node[:opsworks][:rails_stack][:restart_command]}"
     restart_command "sleep #{deploy[:sleep_before_restart]} && #{node[:opsworks][:rails_stack][:restart_command]}"
     
     only_if do

@@ -10,7 +10,7 @@ node[:deploy].each do |application, deploy|
     next
   end
 
-  case node[:opsworks][:rails_stack][:name]
+  case node[:opsworks][:rails_stack][:my_name]
   when 'apache_passenger'
     if node[:opsworks][:rails_stack][:service]
       include_recipe "#{node[:opsworks][:rails_stack][:service]}::service"
@@ -56,6 +56,10 @@ node[:deploy].each do |application, deploy|
       notifies :restart, "service[nginx]"
       action :run
     end
+  when 'torquebox'
+    include_recipe 'torquebox'
+      command "sleep #{deploy[:sleep_before_restart]} && \
+               #{deploy[:deploy_to]}/shared/scripts/torquebox stop"
 
   else
     raise 'Unsupported Rails stack'

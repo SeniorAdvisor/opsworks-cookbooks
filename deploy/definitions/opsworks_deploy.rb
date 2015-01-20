@@ -87,6 +87,8 @@ define :opsworks_deploy do
 
       if deploy[:application_type] == 'rails' && node[:opsworks][:instance][:layers].include?('rails-app')
         restart_command "sleep #{deploy[:sleep_before_restart]} && #{node[:opsworks][:rails_stack][:restart_command]}"
+      elsif node[:opsworks][:rails_stack][:my_name] == 'torquebox'
+        restart_command "#{node[:opsworks][:rails_stack][:restart_command]}"
       end
 
       case deploy[:scm][:scm_type].to_s
