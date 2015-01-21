@@ -24,9 +24,9 @@ node[:deploy].each do |application, deploy|
   end
 
   service "torquebox_#{application}" do
-    start_command "#{deploy[:deploy_to]}/shared/scripts/torquebox start"
+    start_command "#{deploy[:deploy_to]}/shared/scripts/torquebox start &"
     stop_command "#{deploy[:deploy_to]}/shared/scripts/torquebox stop"
-    restart_command "#{deploy[:deploy_to]}/shared/scripts/torquebox restart"
+    restart_command "#{deploy[:deploy_to]}/shared/scripts/torquebox restart &"
     status_command "#{deploy[:deploy_to]}/shared/scripts/torquebox status"
     action :nothing
   end

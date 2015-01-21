@@ -31,7 +31,7 @@ when "torquebox"
   normal[:opsworks][:rails_stack][:recipe] = "torquebox::rails"
   normal[:opsworks][:rails_stack][:needs_reload] = true
   normal[:opsworks][:rails_stack][:service] = 'torquebox'
-  normal[:opsworks][:rails_stack][:restart_command] = '../../shared/scripts/torquebox clean-restart'
+  normal[:opsworks][:rails_stack][:restart_command] = '../../shared/scripts/torquebox clean-restart &'
 else
   raise "Unknown stack: #{node[:opsworks][:rails_stack][:name].inspect}"
 end
