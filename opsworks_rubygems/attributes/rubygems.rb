@@ -18,7 +18,7 @@ include_attribute 'opsworks_initial_setup::default'
 
 default['opsworks_rubygems']['version'] = '2.2.2'
 
-if node['opsworks'] && node['opsworks']['jruby_path']
+if node['opsworks'] && node['opsworks']['jruby_path'] && File.exists?("#{node['opsworks']['jruby_path']}/jruby")
   default[:opsworks_rubygems][:gem_path] = node['opsworks']['jruby_path']
   # set LC_ALL and LANG to workaround US-ASCII errors with rubygems 2.0.3 on opsworks
   case node['opsworks']['ruby_version']

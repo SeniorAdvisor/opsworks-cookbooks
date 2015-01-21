@@ -181,8 +181,6 @@ define :opsworks_deploy do
     end
   end
 
-  Chef::Log.info "deploy: #{deploy.inspect}"
-  Chef::Log.info "node: #{node.inspect}"
   if deploy[:application_type] == 'rails' && node[:opsworks][:instance][:layers].include?('rails-app')
     case node[:opsworks][:rails_stack][:my_name]
 
