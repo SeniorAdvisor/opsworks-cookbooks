@@ -5,7 +5,8 @@ require 'digest/md5'
 
 ROOT_PATH="<%= @deploy[:deploy_to] %>"
 APP_NAME="<%= @application %>"
-PID_PATH="<%= @deploy[:deploy_to] %>/shared/pids/torquebox.pid"
+
+PIDS = "ps axf | grep torquebox | grep -v grep | sed -e 's/^\\s*//'|cut -d' ' -f1"
 
 def run_and_print_command(command)
   puts command
@@ -18,7 +19,8 @@ def run_and_ignore_exitcode_and_print_command(command)
 end
 
 def torquebox_running?
-  if File.exists?(PID_PATH) && (pid = File.read(PID_PATH).chomp) && system("ps aux | grep #{pid} | grep -v grep > /dev/null")
+  pid = system(PIDS)
+  if pid.to_s =~ /\d+/
     pid
   else
     false
@@ -48,9 +50,7 @@ end
 
 def stop_torquebox
   if torquebox_running?
-    if run_and_ignore_exitcode_and_print_command "kill -QUIT `cat #{PID_PATH}`"
-      `rm #{PID_PATH}`
-    end
+    run_and_ignore_exitcode_and_print_command "#{PIDS} |xargs kill -9"
   else
     puts "You can't stop torquebox, because it's not running"
   end
