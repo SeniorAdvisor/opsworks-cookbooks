@@ -105,12 +105,13 @@ define :opsworks_deploy do
       else
         raise "unsupported SCM type #{deploy[:scm][:scm_type].inspect}"
       end
-      before_restart do
-        if deploy[:application_type] == 'rails'
-          command "#{deploy[:bundle]} exec rake assets:precompile"
-          #command "PATH=#{jruby_path}:$PATH #{jruby_path}/gem install bundler -v=#{bundler_version} --no-ri --no-rdoc"
-        end
-      end
+      #before_restart do
+        #if deploy[:application_type] == 'rails'
+          #Chef::Log.info(OpsWorks::ShellOut.shellout("sudo su - #{node[:deploy][application][:user]} -c 'cd #{release_path} && #{node[:deploy][application][:bundle]} install exec rake assets::precompile 2>&1"))
+          ##command "#{deploy[:bundle]} exec rake assets:precompile"
+          ##command "PATH=#{jruby_path}:$PATH #{jruby_path}/gem install bundler -v=#{bundler_version} --no-ri --no-rdoc"
+        #end
+      #end
 
       before_migrate do
         link_tempfiles_to_current_release
