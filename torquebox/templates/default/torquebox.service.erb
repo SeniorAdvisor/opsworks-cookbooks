@@ -19,7 +19,8 @@ def run_and_ignore_exitcode_and_print_command(command)
 end
 
 def torquebox_running?
-  pid = system(PIDS)
+  pid = `#{PIDS}`
+  pid = pid.to_s.sub(Process.pid.to_s,'')
   if pid.to_s =~ /\d+/
     pid
   else
@@ -49,8 +50,8 @@ def start_torquebox
 end
 
 def stop_torquebox
-  if torquebox_running?
-    run_and_ignore_exitcode_and_print_command "#{PIDS} |xargs kill -9"
+ if pids = torquebox_running?
+    run_and_ignore_exitcode_and_print_command "echo \"#{pids}\" |xargs kill -9"
   else
     puts "You can't stop torquebox, because it's not running"
   end
