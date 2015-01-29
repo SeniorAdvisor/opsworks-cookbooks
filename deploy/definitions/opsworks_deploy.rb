@@ -107,7 +107,11 @@ define :opsworks_deploy do
       end
       before_restart do
         if deploy[:application_type] == 'rails' && deploy[:whenever]
-          Chef::Log.info(OpsWorks::ShellOut.shellout("cd #{release_path} && #{node[:deploy][application][:bundle]} exec whenever -i 2>&1"))
+          if node['opsworks'] && node['opsworks']['jruby_path'] && File.exist?('/etc/profile.d/jruby.sh')
+            Chef::Log.info(OpsWorks::ShellOut.shellout(". /etc/profile.d/jruby.sh; cd #{release_path} && #{node[:deploy][application][:bundle]} exec whenever -i 2>&1"))
+          else
+            Chef::Log.info(OpsWorks::ShellOut.shellout("cd #{release_path} && #{node[:deploy][application][:bundle]} exec whenever -i 2>&1"))
+          end
         end
       end
 
