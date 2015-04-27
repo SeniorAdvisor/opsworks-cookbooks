@@ -29,17 +29,17 @@ node[:deploy].each do |application, deploy|
     app application
   end
 
-  execute "run whenever" do
-    user deploy[:user]
-    group deploy[:group]
-    if deploy[:application_type] == 'rails' && deploy[:whenever]
-      if node['opsworks'] && node['opsworks']['jruby_path'] && File.exist?('/etc/profile.d/jruby.sh')
-        command(". /etc/profile.d/jruby.sh; cd #{deploy[:current_path]} && #{deploy[:bundle]} exec whenever -i #{application} 2>&1")
-      else
-        command("cd #{deploy[:current_path]} && #{deploy[:bundle]} exec whenever -i #{application} 2>&1")
-      end
-    end
-  end
+  #execute "run whenever" do
+    #user deploy[:user]
+    #group deploy[:group]
+    #if deploy[:application_type] == 'rails' && deploy[:whenever]
+      #if node['opsworks'] && node['opsworks']['jruby_path'] && File.exist?('/etc/profile.d/jruby.sh')
+        #command(". /etc/profile.d/jruby.sh; cd #{deploy[:current_path]} && #{deploy[:bundle]} exec whenever -i #{application} 2>&1")
+      #else
+        #command("cd #{deploy[:current_path]} && #{deploy[:bundle]} exec whenever -i #{application} 2>&1")
+      #end
+    #end
+  #end
 
   #execute "run foreman" do
     #user deploy[:user]
