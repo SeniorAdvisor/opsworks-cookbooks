@@ -40,4 +40,16 @@ node[:deploy].each do |application, deploy|
       end
     end
   end
+
+  #execute "run foreman" do
+    #user deploy[:user]
+    #group deploy[:group]
+    #if deploy[:application_type] == 'rails' && deploy[:foreman]
+      #if node['opsworks'] && node['opsworks']['jruby_path'] && File.exist?('/etc/profile.d/jruby.sh')
+        #command(". /etc/profile.d/jruby.sh; cd #{deploy[:current_path]} && #{deploy[:bundle]} exec foreman start")
+      #else
+        #command("cd #{deploy[:current_path]} && #{deploy[:bundle]} exec foreman start")
+      #end
+    #end
+  #end
 end
